@@ -1,27 +1,4 @@
 import { ChatCompletion } from 'openai/resources';
-import { vi } from 'vitest';
-
-// Mock the openai module
-vi.mock('openai', () => {
-  const mockCreate = vi.fn();
-
-  return {
-    default: vi.fn().mockImplementation(() => ({
-      chat: {
-        completions: {
-          create: mockCreate,
-        },
-      },
-    })),
-  };
-});
-
-// Access the mocked `create` function
-export async function mockOpenAICreate() {
-  const OpenAI = (await import('openai')).default;
-  const mockInstance = new OpenAI();
-  return vi.mocked(mockInstance.chat.completions.create);
-}
 
 // Helper to create mock chat completion responses
 export function createMockChatCompletion(

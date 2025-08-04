@@ -1,15 +1,26 @@
 import SummaryGenerator from '@/modules/summary-generator';
-import {
-  createMockChatCompletion,
-  mockOpenAICreate,
-} from 'tests/mocks/openai-mock';
-import { beforeEach, describe, expect, it, MockedFunction, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createMockChatCompletion } from '../mocks/openai-mock';
+
+const mockCreate = vi.fn();
+
+vi.mock('openai', () => {
+  return {
+    default: vi.fn().mockImplementation(() => ({
+      chat: {
+        completions: {
+          create: mockCreate,
+        },
+      },
+    })),
+  };
+});
 
 describe('SummaryGenerator', () => {
   const testAPIKey = 'test-api-key';
 
   const maxSnippetTextLength = 3000;
-  const minSnippetTextLength = 25;
+  const minSnippetTextLength = 30;
 
   describe('constructor', () => {
     it('should throw error if no API key provided', () => {
@@ -24,52 +35,53 @@ describe('SummaryGenerator', () => {
   describe('generate', () => {
     let summaryGenerator: SummaryGenerator;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let mockedOpenAICreate: MockedFunction<any>;
-
     beforeEach(async () => {
       vi.clearAllMocks();
-
-      // Get the mocked create function
-      mockedOpenAICreate = await mockOpenAICreate();
-
       summaryGenerator = new SummaryGenerator(testAPIKey);
     });
 
     it('should throw error for empty text', async () => {
-      await expect(() => summaryGenerator.generate()).rejects.toThrow(
+      await expect(() => summaryGenerator.generate('')).rejects.toThrow(
         'Snippet text is required',
       );
     });
 
     it('should throw error for text that is too long', async () => {
-      await expect(() => summaryGenerator.generate()).rejects.toThrow(
+      const longSnippet = 'x'.repeat(maxSnippetTextLength + 1);
+
+      await expect(() =>
+        summaryGenerator.generate(longSnippet),
+      ).rejects.toThrow(
         `Snippet text is too long. Maximum of ${maxSnippetTextLength} characters`,
       );
     });
 
     it('should throw error for text that is too short', async () => {
-      await expect(() => summaryGenerator.generate()).rejects.toThrow(
-        `Snippet text is too long. Minimum of ${minSnippetTextLength} characters`,
+      const invalidSnippet = 'x'.repeat(minSnippetTextLength - 1);
+
+      await expect(() =>
+        summaryGenerator.generate(invalidSnippet),
+      ).rejects.toThrow(
+        `Snippet text is too short. Minimum of ${minSnippetTextLength} characters`,
       );
     });
 
     it('should generate summary for valid text', async () => {
-      mockedOpenAICreate.mockResolvedValue(createMockChatCompletion('Summary'));
+      const input = 'x'.repeat(100);
+      const output = 'summary';
 
-      const result = await summaryGenerator.generate();
+      mockCreate.mockResolvedValue(createMockChatCompletion(output));
 
-      expect(result).toBe('Summary');
-      expect(mockedOpenAICreate).toHaveBeenCalledTimes(1);
-      expect(mockedOpenAICreate).toHaveBeenCalledWith(
+      const result = await summaryGenerator.generate(input);
+
+      expect(result).toBe(output);
+      expect(mockCreate).toHaveBeenCalledTimes(1);
+      expect(mockCreate).toHaveBeenCalledWith(
         expect.objectContaining({
           model: expect.any(String),
-          message: expect.any(Array),
+          messages: expect.any(Array),
+          temperature: expect.any(Number),
         }),
-      );
-
-      await expect(() => summaryGenerator.generate()).rejects.toThrow(
-        `Snippet text is too long. Minimum of ${minSnippetTextLength} characters`,
       );
     });
   });
