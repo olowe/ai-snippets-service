@@ -71,4 +71,32 @@ describe('SnippetManager', () => {
       expect(result).toBeNull();
     });
   });
+
+  describe('getAllSnippets', () => {
+    it('should return empty array when no snippets exist', async () => {
+      const result = await snippetManager.getAllSnippets();
+      expect(result).toEqual([]);
+    });
+
+    it('should return all snippets ordered by creation date', async () => {
+      // Create multiple snippets
+      const input = 'x'.repeat(100);
+      const output = 'summary';
+      mockGenerate.mockResolvedValue(output);
+
+      const snippet1 = await snippetManager.createSnippet({
+        text: input,
+      });
+      const snippet2 = await snippetManager.createSnippet({
+        text: input,
+      });
+
+      const result = await snippetManager.getAllSnippets();
+
+      expect(result).toHaveLength(2);
+      // Should be ordered by creation time (most recent first)
+      expect(result[0]?.id).toBe(snippet2.id);
+      expect(result[1]?.id).toBe(snippet1.id);
+    });
+  });
 });
