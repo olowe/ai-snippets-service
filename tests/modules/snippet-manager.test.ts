@@ -1,24 +1,30 @@
 import SnippetManager from '@/modules/snippet-manager';
+import SummaryGenerator from '@/modules/summary-generator';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+const mockGenerate = vi.fn();
+
+vi.mock('@/modules/summary-generator', () => {
+  return {
+    default: vi.fn().mockImplementation(() => ({
+      generate: mockGenerate,
+    })),
+  };
+});
+
 describe('SnippetManager', () => {
+  const mockSummaryGenerator = new SummaryGenerator('key');
+
   let snippetManager: SnippetManager;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let mockSummaryGenerator: any;
 
   beforeEach(() => {
-    // Create a mock SummaryGenerator
-    mockSummaryGenerator = {
-      generate: vi.fn(),
-    };
-
-    // Inject the mock into SnippetManager
+    vi.clearAllMocks();
     snippetManager = new SnippetManager(mockSummaryGenerator);
   });
 
   describe('createSnippet', () => {
     it('should throw error for empty text', async () => {
-      await expect(snippetManager.createSnippet()).rejects.toThrow(
+      await expect(snippetManager.createSnippet({ text: '' })).rejects.toThrow(
         'Text content is required',
       );
     });
@@ -27,16 +33,16 @@ describe('SnippetManager', () => {
       const input = 'x'.repeat(100);
       const output = 'summary';
 
-      vi.mocked(mockSummaryGenerator.generateSummary).mockResolvedValue(output);
+      mockGenerate.mockResolvedValue(output);
 
-      const result = await snippetManager.createSnippet();
+      const result = await snippetManager.createSnippet({ text: input });
 
       expect(result).toHaveProperty('id');
       expect(result).toHaveProperty('text');
       expect(result).toHaveProperty('summary');
       expect(result.text).toBe(input);
       expect(result.summary).toBe(output);
-      expect(mockSummaryGenerator.generateSummary).toHaveBeenCalledWith(input);
+      expect(mockSummaryGenerator.generate).toHaveBeenCalledWith(input);
     });
   });
 });
