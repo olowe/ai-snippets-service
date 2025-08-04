@@ -10,7 +10,7 @@ export interface ISnippetResponse {
   summary: string;
 }
 
-export class SnippetService {
+class SnippetManager {
   private summaryGenerator: SummaryGenerator;
 
   constructor(summaryGenerator: SummaryGenerator) {
@@ -38,3 +38,5 @@ export class SnippetService {
     throw new Error('Unavailable');
   }
 }
+
+export default SnippetManager;
