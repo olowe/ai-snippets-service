@@ -43,7 +43,7 @@ class SnippetManager {
     };
   }
 
-  async getSnippetById(): Promise<ISnippetResponse | null> {
+  async getSnippetById(id: string): Promise<ISnippetResponse | null> {
     // Validate id
     // Retrieve snippet
     // Return snippet (or null)

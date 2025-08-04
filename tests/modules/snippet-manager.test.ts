@@ -45,4 +45,28 @@ describe('SnippetManager', () => {
       expect(mockSummaryGenerator.generate).toHaveBeenCalledWith(input);
     });
   });
+
+  describe('getSnippetById', () => {
+    it('should throw error for invalid id', async () => {
+      await expect(snippetManager.getSnippetById('')).rejects.toThrow(
+        'id is required',
+      );
+    });
+
+    it('should return snippet when found', async () => {
+      const input = 'x'.repeat(100);
+      const output = 'summary';
+
+      mockGenerate.mockResolvedValue(output);
+      const newSnippet = await snippetManager.createSnippet({ text: input });
+
+      const result = await snippetManager.getSnippetById(newSnippet.id);
+      expect(result).toEqual(newSnippet);
+    });
+
+    it('should return null when snippet not found', async () => {
+      const result = await snippetManager.getSnippetById('id');
+      expect(result).toBeNull();
+    });
+  });
 });
