@@ -45,9 +45,23 @@ class SnippetManager {
 
   async getSnippetById(id: string): Promise<ISnippetResponse | null> {
     // Validate id
+    if (!id) {
+      throw new Error('id is required');
+    }
+
     // Retrieve snippet
+    const snippet = await Snippet.findById(id);
+
     // Return snippet (or null)
-    throw new Error('Unavailable');
+    if (!snippet) {
+      return null;
+    }
+
+    return {
+      id: snippet.id,
+      text: snippet.text,
+      summary: snippet.summary,
+    };
   }
 
   async getAllSnippets(): Promise<ISnippetResponse[]> {

@@ -65,7 +65,9 @@ describe('SnippetManager', () => {
     });
 
     it('should return null when snippet not found', async () => {
-      const result = await snippetManager.getSnippetById('id');
+      const result = await snippetManager.getSnippetById(
+        '0123456789acc4a62520d2f5',
+      );
       expect(result).toBeNull();
     });
   });
