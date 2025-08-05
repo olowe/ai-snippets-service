@@ -24,7 +24,7 @@ A full-stack TypeScript service that transforms raw text content into AI-generat
 ### Clone the repo
 
 ```bash
-git clone <your-repo-url>
+git clone git@github.com:olowe/ai-snippets-service.git
 cd ai-snippet-service
 ```
 
