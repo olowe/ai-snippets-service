@@ -1,4 +1,5 @@
 import { connectDB } from '@/config/database';
+import { errorHandler } from '@/middleware/errors';
 import { snippetsRouter } from '@/routes';
 import cors from 'cors';
 import 'dotenv/config';
@@ -13,6 +14,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // API Routes
 app.use('/snippets', snippetsRouter);
+
+// Route middleware
+app.use(errorHandler);
 
 const startServer = async () => {
   try {
@@ -29,3 +33,5 @@ const startServer = async () => {
 };
 
 startServer();
+
+export default app;
