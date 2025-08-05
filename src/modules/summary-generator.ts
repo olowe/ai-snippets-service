@@ -56,7 +56,7 @@ class SummaryGenerator {
     }
 
     // Handle errors
-    throw new Error('Unavailable');
+    throw new Error('Could not generate summary');
   }
 }
 
