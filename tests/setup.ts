@@ -13,7 +13,7 @@ beforeAll(async () => {
   await mongoose.connect(mongoUri);
 
   // timeout for init delay in some envs
-}, 120000);
+}, 300000);
 
 afterEach(async () => {
   // Clear database after each test

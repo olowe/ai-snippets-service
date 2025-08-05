@@ -5,7 +5,10 @@ services:
       - '27017:27017'
 
   backend:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
     ports:
       - '3000:3000'
     env_file: .env
@@ -16,3 +19,17 @@ services:
       - MONGOMS_DOWNLOAD_URL=https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2004-7.0.14.tgz
     depends_on:
       - mongodb
+
+  frontend:
+    build:
+      context: ./ai-snippet-web
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - '3030:3030'
+    env_file: .env
+    environment:
+      - PORT=3030
+      - VITE_API_BASE_URL=http://backend:3000
+    depends_on:
+      - backend
