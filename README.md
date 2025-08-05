@@ -149,9 +149,6 @@ docker compose up --build
 
 ## 🧪 Running Tests
 
-**Tests may start slowly in Docker environment** -
-[https://github.com/typegoose/mongodb-memory-server/discussions/516#discussioncomment-1082863](https://github.com/typegoose/mongodb-memory-server/discussions/516#discussioncomment-1082863)
-
 ```bash
 # Backend unit tests
 npm run test
