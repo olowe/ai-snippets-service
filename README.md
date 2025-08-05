@@ -46,8 +46,10 @@ cd ai-snippets-service
 cp .env.example .env
 
 # Add your OpenAI API key
-OPENAI_API_KEY=sk-your-actual-openai-key-here
-NODE_ENV=development
+OPENAI_API_KEY="..."
+
+# Set NODE_ENV
+NODE_ENV="development"
 ```
 
 ### Install dependencies
@@ -79,26 +81,33 @@ cd ai-snippet-web && npm run dev
 
 ## 🐳 Docker environment
 
+### Docker environment configuration
+
+1. Get OpenAI API key from: https://platform.openai.com/api-keys
+2. Create `.env.prod` file in project root:
+
+```bash
+# Copy the example environment file and update it
+cp .env.example .env.prod
+
+# Add your OpenAI API key
+OPENAI_API_KEY="..."
+
+# Set db uri
+MONGODB_URI="mongodb://mongodb:27017/<db-name>"
+
+# Set test db uri
+TEST_MONGODB_URI="mongodb://mongodb:27017/<test-db-name>"
+
+# Set NODE_ENV
+NODE_ENV="production"
+```
+
+### Start the entire application stack
+
 ```bash
 # Start everything (runs tests first, then starts services)
 docker compose up --build
-```
-
-### 🛠 Troubleshooting Docker Issues
-
-**If you encounter lock file or build issues:**
-
-```bash
-# Clean up THIS project's containers and volumes only
-docker compose down -v --remove-orphans
-
-# Remove only THIS project's containers and images
-docker compose rm -f
-docker rmi $(docker images ai-snippet-* -q) 2>/dev/null || true
-
-# Rebuild from scratch
-docker compose build --no-cache
-docker compose up
 ```
 
 **Services will be available at:**
