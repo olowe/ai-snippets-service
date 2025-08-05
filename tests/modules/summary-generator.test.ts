@@ -1,5 +1,5 @@
-import SummaryGenerator from '@/modules/summary-generator';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import SummaryGenerator from '../../src/modules/summary-generator';
 import { createMockChatCompletion } from '../mocks/openai-mock';
 
 const mockCreate = vi.fn();

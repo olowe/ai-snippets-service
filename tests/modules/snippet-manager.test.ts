@@ -1,10 +1,10 @@
-import SnippetManager from '@/modules/snippet-manager';
-import SummaryGenerator from '@/modules/summary-generator';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import SnippetManager from '../../src/modules/snippet-manager';
+import SummaryGenerator from '../../src/modules/summary-generator';
 
 const mockGenerate = vi.fn();
 
-vi.mock('@/modules/summary-generator', () => {
+vi.mock('../../src/modules/summary-generator', () => {
   return {
     default: vi.fn().mockImplementation(() => ({
       generate: mockGenerate,

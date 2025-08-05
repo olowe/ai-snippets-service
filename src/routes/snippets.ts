@@ -1,8 +1,8 @@
 import 'dotenv/config';
-import { asyncHandler, createApiError } from '@/middleware/errors';
-import SnippetManager from '@/modules/snippet-manager';
-import SummaryGenerator from '@/modules/summary-generator';
-import { Router, Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
+import { asyncHandler, createApiError } from '../middleware/errors';
+import SnippetManager from '../modules/snippet-manager';
+import SummaryGenerator from '../modules/summary-generator';
 
 const router = Router();
 

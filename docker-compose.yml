@@ -1,0 +1,18 @@
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+
+  backend:
+    build: .
+    ports:
+      - '3000:3000'
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - MONGODB_URI=mongodb://mongodb:27017/snippets
+      - MONGOMS_DOWNLOAD_URL=https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2004-7.0.14.tgz
+    depends_on:
+      - mongodb

@@ -1,4 +1,4 @@
-import { Snippet } from '@/models/Snippet';
+import { Snippet } from '../models/Snippet';
 import SummaryGenerator from './summary-generator';
 
 export interface CreateSnippetDTO {

@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "name": "ai-snippet-service",
   "version": "1.0.0",
   "description": "API for AI Snippet Service",
