@@ -38,6 +38,8 @@ cd ai-snippets-service
 
 ### Environment Configuration
 
+**Backend:**
+
 1. Get OpenAI API key from: https://platform.openai.com/api-keys
 2. Create `.env` file in project root:
 
@@ -50,6 +52,19 @@ OPENAI_API_KEY="..."
 
 # Set NODE_ENV
 NODE_ENV="development"
+```
+
+**Frontend:**
+
+```bash
+# Navigate to the frontend service
+cd ai-snippet-web
+
+# Copy the example environment file and update it
+cp .env.example .env
+
+# Set API URL
+VITE_API_BASE_URL="http://localhost:3000"
 ```
 
 ### Install dependencies
@@ -83,6 +98,8 @@ cd ai-snippet-web && npm run dev
 
 ### Docker environment configuration
 
+**Backend:**
+
 1. Get OpenAI API key from: https://platform.openai.com/api-keys
 2. Create `.env.prod` file in project root:
 
@@ -103,10 +120,24 @@ TEST_MONGODB_URI="mongodb://mongodb:27017/<test-db-name>"
 NODE_ENV="production"
 ```
 
+**Frontend:**
+
+```bash
+# Navigate to the frontend service
+cd ai-snippet-web
+
+# Copy the example environment file and update it
+cp .env.example .env
+
+# Set API URL
+VITE_API_BASE_URL="http://localhost:3000"
+```
+
 ### Start the entire application stack
 
 ```bash
 # Start everything (runs tests first, then starts services)
+# At the project root, run:
 docker compose up --build
 ```
 

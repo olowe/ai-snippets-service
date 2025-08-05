@@ -22,8 +22,6 @@ services:
     container_name: frontend
     ports:
       - '3030:3030'
-    env_file: .env
-    environment:
-      - VITE_API_BASE_URL=http://backend:3000
+    env_file: ./ai-snippet-web/.env
     depends_on:
       - backend
