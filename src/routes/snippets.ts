@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { asyncHandler, createApiError } from '@/middleware/errors';
 import SnippetManager from '@/modules/snippet-manager';
 import SummaryGenerator from '@/modules/summary-generator';
@@ -5,10 +6,14 @@ import { Router, Request, Response } from 'express';
 
 const router = Router();
 
+// Validate environment variables
+const apiKey = process.env.OPENAI_API_KEY;
+if (!apiKey) {
+  throw new Error('OPENAI_API_KEY environment variable is required');
+}
+
 // Initialize modules
-const summaryGenerator = new SummaryGenerator(
-  process.env.OPENAI_API_KEY as string,
-);
+const summaryGenerator = new SummaryGenerator(apiKey);
 const snippetManager = new SnippetManager(summaryGenerator);
 
 // POST /snippets - Create a new snippet

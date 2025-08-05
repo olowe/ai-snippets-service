@@ -9,6 +9,8 @@ export const errorHandler = (
   error: ApiError,
   req: Request,
   res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  next: NextFunction,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): any => {
   console.error('Error:', error);
