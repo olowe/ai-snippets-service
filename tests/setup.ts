@@ -7,8 +7,8 @@ let memoryServer: MongoMemoryServer;
 const isDocker = process.env.NODE_ENV === 'production';
 
 const mongoUri = isDocker
-  ? process.env.TEST_MONGODB_URI // Use the Docker service
-  : undefined; // Will use MongoDB Memory Server
+  ? process.env.TEST_MONGODB_URI // Use the PROD test db
+  : undefined; // Use MongoDB Memory Server
 
 beforeAll(async () => {
   let uri: string;
@@ -25,9 +25,7 @@ beforeAll(async () => {
   }
 
   await mongoose.connect(uri);
-
-  // timeout for init delay in some envs
-}, 300000);
+});
 
 afterEach(async () => {
   // Clear database after each test
