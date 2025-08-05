@@ -94,6 +94,7 @@ describe('SnippetManager', () => {
       const result = await snippetManager.getAllSnippets();
 
       expect(result).toHaveLength(2);
+
       // Should be ordered by creation time (most recent first)
       expect(result[0]?.id).toBe(snippet2.id);
       expect(result[1]?.id).toBe(snippet1.id);

@@ -66,8 +66,14 @@ class SnippetManager {
 
   async getAllSnippets(): Promise<ISnippetResponse[]> {
     // Get raw snippets sorted by date created
+    const snippets = await Snippet.find().sort({ createdAt: -1 });
+
     // Transform to response type
-    throw new Error('Unavailable');
+    return snippets.map((snippet) => ({
+      id: snippet.id,
+      text: snippet.text,
+      summary: snippet.summary,
+    }));
   }
 }
 
