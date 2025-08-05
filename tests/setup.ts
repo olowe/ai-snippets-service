@@ -3,14 +3,28 @@ import mongoose from 'mongoose';
 import { afterAll, afterEach, beforeAll } from 'vitest';
 
 let memoryServer: MongoMemoryServer;
+// Check if we're running in Docker by looking for the mongodb service
+const isDocker = process.env.NODE_ENV === 'production';
+
+const mongoUri = isDocker
+  ? process.env.TEST_MONGODB_URI // Use the Docker service
+  : undefined; // Will use MongoDB Memory Server
 
 beforeAll(async () => {
-  // Start instance of in-memory database
-  memoryServer = await MongoMemoryServer.create();
-  const mongoUri = memoryServer.getUri();
+  let uri: string;
 
-  // Connect mongoose to the in-memory database
-  await mongoose.connect(mongoUri);
+  if (isDocker) {
+    // In Docker, use the real MongoDB container
+    uri = mongoUri as string;
+    console.log('Using Docker MongoDB container for tests');
+  } else {
+    // Locally, use MongoDB Memory Server
+    memoryServer = await MongoMemoryServer.create();
+    uri = memoryServer.getUri();
+    console.log('Using MongoDB Memory Server for tests');
+  }
+
+  await mongoose.connect(uri);
 
   // timeout for init delay in some envs
 }, 300000);
@@ -28,5 +42,8 @@ afterEach(async () => {
 afterAll(async () => {
   // Disconnect and stop in-memory database
   await mongoose.disconnect();
-  await memoryServer.stop();
+
+  if (memoryServer) {
+    await memoryServer.stop({ doCleanup: true, force: true });
+  }
 });
